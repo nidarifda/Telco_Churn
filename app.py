@@ -4,7 +4,7 @@ import joblib
 
 # === Page Configuration ===
 st.set_page_config(
-    page_title="TelcoChurn AI",
+    page_title="IBM Telco Churn Prediction",
     page_icon="📊",
     layout="centered"
 )
@@ -47,7 +47,7 @@ with col2:
 st.markdown("")
 
 # === Predict Button ===
-if st.button("🔍 Predict Churn", use_container_width=True):
+if st.button("Predict Churn", use_container_width=True):
     input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
     input_scaled = scaler.transform(input_data)
     prediction = model.predict(input_scaled)[0]
