@@ -28,7 +28,7 @@ This AI-powered tool predicts the likelihood of a telco customer churning based 
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
 # === Main Title ===
-st.markdown("<h1 style='text-align: center; color: #2c3e50;'>📡 TelcoChurn AI</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>Telco Churn Prediction</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
