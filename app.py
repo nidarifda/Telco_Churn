@@ -41,7 +41,22 @@ with col1:
     tenure_months = st.slider("Tenure (Months)", 0, 72, 24)
 
 with col2:
-    avg_gb = st.slider("Avg Monthly GB Download", 0.0, 100.0, 20.0)
+    data_plan = st.selectbox("Data Plan", [
+        "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
+    ])
+
+    gb_mapping = {
+        "10 GB": 10,
+        "30 GB": 30,
+        "50 GB": 50,
+        "100 GB": 100,
+        "200 GB": 200,
+        "300 GB": 300,
+        "Unlimited": 500  # simulate very high usage
+    }
+
+    avg_gb = gb_mapping[data_plan]
+
     satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
 
 st.markdown("")
