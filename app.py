@@ -9,6 +9,48 @@ st.set_page_config(
     layout="centered"
 )
 
+# === Custom Styling ===
+st.markdown("""
+<style>
+body {
+    background-color: #eaf4fb !important;
+    color: #1f1f1f;
+}
+.main, .block-container {
+    background-color: #eaf4fb !important;
+    padding: 2rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #003366 !important;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+p {
+    text-align: center;
+    font-size: 1.05rem;
+}
+.stButton>button, .stDownloadButton>button {
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+.stFileUploader, .stExpander, .stDataFrame, .stTable {
+    background-color: #ffffff !important;
+    padding: 1rem;
+    border-radius: 10px;
+    color: #1f1f1f;
+}
+section[data-testid="stSidebar"] {
+    background-color: #003366 !important;
+    color: white !important;
+}
+section[data-testid="stSidebar"] .css-1cpxqw2 {
+    color: white !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # === Load Model and Scaler ===
 model = joblib.load("xgb_churn_model.pkl")
 scaler = joblib.load("minmax_scaler.pkl")
@@ -16,19 +58,19 @@ scaler = joblib.load("minmax_scaler.pkl")
 # === Sidebar ===
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/8370/8370201.png", use_column_width=True)
-    st.markdown("## About This App")
+    st.markdown("<h3 style='color: white;'>About This App</h3>", unsafe_allow_html=True)
     st.markdown("""
 This AI-powered tool predicts the likelihood of a telco customer churning based on key behavioral indicators.
 
 🔹 Real-time ML inference  
 🔹 Streamlined feature input  
-🔹 Built with using XGBoost & Streamlit  
+🔹 Built using XGBoost & Streamlit  
     """)
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
 # === Main Title ===
-st.markdown("<h1 style='text-align: center; color: #2c3e50;'>Telco Churn Prediction</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #003366;'>Telco Churn Prediction</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
@@ -52,11 +94,10 @@ with col2:
         "100 GB": 100,
         "200 GB": 200,
         "300 GB": 300,
-        "Unlimited": 500  # simulate very high usage
+        "Unlimited": 500
     }
 
     avg_gb = gb_mapping[data_plan]
-
     satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
 
 st.markdown("")
