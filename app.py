@@ -2,28 +2,25 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# === Page Configuration ===
-st.set_page_config(
-    page_title="IBM Telco Churn Prediction",
-    layout="centered"
-)
+# === Page Config ===
+st.set_page_config(page_title="IBM Telco Churn Prediction", layout="centered")
 
-# === Custom Styling ===
+# === Custom CSS ===
 st.markdown("""
 <style>
     html, body, .stApp {
         background-color: #dfeffe;
     }
-    .main-container {
+    .main-card {
         background-color: #f4f4f4;
         padding: 2rem 3rem;
         border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
         max-width: 800px;
         margin: 2rem auto;
     }
-    h1, h2, h3, h4, h5 {
-        color: #1b2e70 !important;
+    h1, h2, h3 {
+        color: #1b2e70;
         text-align: center;
         font-family: 'Segoe UI', sans-serif;
     }
@@ -47,7 +44,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# === Load Model and Scaler ===
+# === Load Model & Scaler ===
 model = joblib.load("xgb_churn_model.pkl")
 scaler = joblib.load("minmax_scaler.pkl")
 
@@ -58,27 +55,27 @@ with st.sidebar:
     st.markdown("""
 This AI-powered tool predicts the likelihood of a telco customer churning based on key behavioral indicators.
 
-- Real-time ML inference  
-- Streamlined feature input  
-- Powered by XGBoost & Streamlit  
+🔹 Real-time ML inference  
+🔹 Streamlined feature input  
+🔹 Powered by XGBoost & Streamlit  
 """)
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
-# === MAIN CONTENT BOX ===
+# === Main App UI ===
 with st.container():
-    st.markdown("<div class='main-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='main-card'>", unsafe_allow_html=True)
 
-    st.markdown("<h1>Telco Churn Prediction</h1>", unsafe_allow_html=True)
-    st.markdown("<p>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
+    st.markdown("## Telco Churn Prediction")
+    st.markdown("Predict customer churn with confidence.")
     st.markdown("---")
 
-    # === Input Fields ===
     st.markdown("### Customer Input")
     col1, col2 = st.columns(2)
     with col1:
         monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0, step=1.0)
         tenure_months = st.slider("Tenure (Months)", 0, 72, 24)
+
     with col2:
         data_plan = st.selectbox("Data Plan", [
             "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
@@ -113,4 +110,4 @@ with st.container():
         unsafe_allow_html=True
     )
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)  # CLOSE main-card
