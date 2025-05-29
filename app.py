@@ -2,53 +2,49 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# === Page Config ===
+# Page config
 st.set_page_config(page_title="IBM Telco Churn Prediction", layout="centered")
 
-# === Custom CSS ===
+# Custom CSS
 st.markdown("""
-<style>
-    html, body, .stApp {
-        background-color: #dfeffe;
-    }
-    .main-card {
-        background-color: #f4f4f4;
-        padding: 2rem 3rem;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        max-width: 800px;
-        margin: 2rem auto;
-    }
-    h1, h2, h3 {
-        color: #1b2e70;
-        text-align: center;
-        font-family: 'Segoe UI', sans-serif;
-    }
-    p {
-        text-align: center;
-    }
-    .stButton>button {
-        background-color: #1b2e70;
-        color: white;
-        font-weight: bold;
-        border-radius: 6px;
-        padding: 0.5rem 1.5rem;
-    }
-    section[data-testid="stSidebar"] {
-        background-color: #1b2e70 !important;
-        color: white !important;
-    }
-    section[data-testid="stSidebar"] * {
-        color: white !important;
-    }
-</style>
+    <style>
+        html, body, .stApp {
+            background-color: #dfeffe;
+        }
+        .main-card {
+            background-color: #f4f4f4;
+            padding: 2rem 3rem;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h1, h2, h3 {
+            color: #1b2e70;
+            text-align: center;
+        }
+        .stButton>button {
+            background-color: #1b2e70;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            padding: 0.5rem 1.5rem;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #1b2e70 !important;
+            color: white !important;
+        }
+        section[data-testid="stSidebar"] * {
+            color: white !important;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
-# === Load Model & Scaler ===
+# Load model and scaler
 model = joblib.load("xgb_churn_model.pkl")
 scaler = joblib.load("minmax_scaler.pkl")
 
-# === Sidebar ===
+# Sidebar
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/8370/8370201.png", use_column_width=True)
     st.markdown("## About This App")
@@ -58,19 +54,19 @@ This AI-powered tool predicts the likelihood of a telco customer churning based 
 🔹 Real-time ML inference  
 🔹 Streamlined feature input  
 🔹 Powered by XGBoost & Streamlit  
-""")
+    """)
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
-# === Main App UI ===
+# Main card container
 with st.container():
     st.markdown("<div class='main-card'>", unsafe_allow_html=True)
 
     st.markdown("## Telco Churn Prediction")
     st.markdown("Predict customer churn with confidence.")
     st.markdown("---")
-
     st.markdown("### Customer Input")
+
     col1, col2 = st.columns(2)
     with col1:
         monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0, step=1.0)
@@ -87,7 +83,7 @@ with st.container():
         avg_gb = gb_mapping[data_plan]
         satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
 
-    # === Prediction ===
+    # Prediction
     if st.button("Predict Churn"):
         input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
         input_scaled = scaler.transform(input_data)
@@ -101,7 +97,7 @@ with st.container():
         else:
             st.success(f"✅ This customer is **likely to stay**.\n\n**Churn Probability: {prob:.2%}**")
 
-    # === Footer ===
+    # Footer inside card
     st.markdown("---")
     st.markdown(
         "<div style='text-align: center; font-size: 0.9em;'>"
@@ -110,4 +106,4 @@ with st.container():
         unsafe_allow_html=True
     )
 
-    st.markdown("</div>", unsafe_allow_html=True)  # CLOSE main-card
+    st.markdown("</div>", unsafe_allow_html=True)
