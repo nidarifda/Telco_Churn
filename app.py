@@ -12,12 +12,16 @@ st.set_page_config(
 st.markdown("""
     <style>
         html, body, .stApp {
-            background-color: #dfeffe; /* Soft Blue */
+            background-color: #dfeffe;  /* Soft Blue */
         }
-        .block-container {
-            background-color: #f4f4f4 !important; /* Soft Grey Card Style */
+        .scrollable-container {
+            background-color: #f4f4f4;
+            max-height: 90vh;
+            overflow-y: auto;
             padding: 2rem;
             border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 2rem;
         }
         h1, h2, h3, h4, h5, h6 {
             color: #1b2e70 !important;
@@ -66,7 +70,10 @@ This AI-powered tool predicts the likelihood of a telco customer churning based 
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
-# === Main Title ===
+# === Main Scrollable Content Container ===
+st.markdown('<div class="scrollable-container">', unsafe_allow_html=True)
+
+# === Title & Description ===
 st.markdown("<h1>Telco Churn Prediction</h1>", unsafe_allow_html=True)
 st.markdown("<p>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
 st.markdown("---")
@@ -77,12 +84,13 @@ st.markdown("#### Customer Input")
 col1, col2 = st.columns(2)
 with col1:
     monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0, step=1.0)
-    tenure_months = st.slider("Tenure (Months)", 0, 72, 24)
+    tenure_months = st.slider("Tenure (Months)", 0, 72, 24, key="tenure")
 
 with col2:
     data_plan = st.selectbox("Data Plan", [
         "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
-    ])
+    ], key="data_plan")
+
     gb_mapping = {
         "10 GB": 10,
         "30 GB": 30,
@@ -92,11 +100,12 @@ with col2:
         "300 GB": 300,
         "Unlimited": 500
     }
-    avg_gb = gb_mapping[data_plan]
-    satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
 
-# === Prediction ===
-if st.button("Predict Churn", use_container_width=True):
+    avg_gb = gb_mapping[data_plan]
+    satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3, key="satisfaction")
+
+# === Predict Button ===
+if st.button("Predict Churn"):
     input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
     input_scaled = scaler.transform(input_data)
     prediction = model.predict(input_scaled)[0]
@@ -118,3 +127,6 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
+
+# === Close Scroll Container ===
+st.markdown("</div>", unsafe_allow_html=True)
