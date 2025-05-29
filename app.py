@@ -2,25 +2,29 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# Page config
+# === Page Configuration ===
 st.set_page_config(page_title="IBM Telco Churn Prediction", layout="centered")
 
-# Custom CSS
+# === Custom Styling ===
 st.markdown("""
     <style>
-        html, body, .stApp {
-            background-color: #dfeffe;
+        body, .stApp {
+            background-color: #dfeffe; /* Soft Blue */
         }
-        .main-card {
-            background-color: #f4f4f4;
-            padding: 2rem 3rem;
+        .card {
+            background-color: #f4f4f4; /* Light Grey Card */
+            padding: 2rem;
             border-radius: 12px;
-            max-width: 800px;
-            margin: 2rem auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: auto;
         }
-        h1, h2, h3 {
+        h1, h2 {
             color: #1b2e70;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        p {
             text-align: center;
         }
         .stButton>button {
@@ -28,7 +32,6 @@ st.markdown("""
             color: white;
             font-weight: bold;
             border-radius: 6px;
-            padding: 0.5rem 1.5rem;
         }
         section[data-testid="stSidebar"] {
             background-color: #1b2e70 !important;
@@ -40,11 +43,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Load model and scaler
+# === Load Model and Scaler ===
 model = joblib.load("xgb_churn_model.pkl")
 scaler = joblib.load("minmax_scaler.pkl")
 
-# Sidebar
+# === Sidebar ===
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/8370/8370201.png", use_column_width=True)
     st.markdown("## About This App")
@@ -58,52 +61,51 @@ This AI-powered tool predicts the likelihood of a telco customer churning based 
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
-# Main card container
-with st.container():
-    st.markdown("<div class='main-card'>", unsafe_allow_html=True)
+# === Main Card Container ===
+st.markdown('<div class="card">', unsafe_allow_html=True)
 
-    st.markdown("## Telco Churn Prediction")
-    st.markdown("Predict customer churn with confidence.")
+st.markdown("<h1>Telco Churn Prediction</h1>", unsafe_allow_html=True)
+st.markdown("<p>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<h2>Customer Input</h2>", unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0, step=1.0)
+    tenure_months = st.slider("Tenure (Months)", 0, 72, 24)
+
+with col2:
+    data_plan = st.selectbox("Data Plan", [
+        "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
+    ])
+    gb_mapping = {
+        "10 GB": 10,
+        "30 GB": 30,
+        "50 GB": 50,
+        "100 GB": 100,
+        "200 GB": 200,
+        "300 GB": 300,
+        "Unlimited": 500
+    }
+    avg_gb = gb_mapping[data_plan]
+    satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
+
+# === Prediction ===
+if st.button("Predict Churn"):
+    input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
+    input_scaled = scaler.transform(input_data)
+    prediction = model.predict(input_scaled)[0]
+    prob = model.predict_proba(input_scaled)[0][1]
+
     st.markdown("---")
-    st.markdown("### Customer Input")
+    st.subheader("Prediction Result")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0, step=1.0)
-        tenure_months = st.slider("Tenure (Months)", 0, 72, 24)
+    if prediction == 1:
+        st.error(f"⚠️ This customer is **likely to churn**.\n\n**Churn Probability: {prob:.2%}**")
+    else:
+        st.success(f"✅ This customer is **likely to stay**.\n\n**Churn Probability: {prob:.2%}**")
 
-    with col2:
-        data_plan = st.selectbox("Data Plan", [
-            "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
-        ])
-        gb_mapping = {
-            "10 GB": 10, "30 GB": 30, "50 GB": 50,
-            "100 GB": 100, "200 GB": 200, "300 GB": 300, "Unlimited": 500
-        }
-        avg_gb = gb_mapping[data_plan]
-        satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; font-size: 0.9em;'>📡 TelcoChurn AI • Powered by XGBoost • © 2025 All rights reserved</div>", unsafe_allow_html=True)
 
-    # Prediction
-    if st.button("Predict Churn"):
-        input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
-        input_scaled = scaler.transform(input_data)
-        prediction = model.predict(input_scaled)[0]
-        prob = model.predict_proba(input_scaled)[0][1]
-
-        st.markdown("---")
-        st.subheader("Prediction Result")
-        if prediction == 1:
-            st.error(f"⚠️ This customer is **likely to churn**.\n\n**Churn Probability: {prob:.2%}**")
-        else:
-            st.success(f"✅ This customer is **likely to stay**.\n\n**Churn Probability: {prob:.2%}**")
-
-    # Footer inside card
-    st.markdown("---")
-    st.markdown(
-        "<div style='text-align: center; font-size: 0.9em;'>"
-        "📡 TelcoChurn AI • Powered by XGBoost • © 2025 All rights reserved"
-        "</div>",
-        unsafe_allow_html=True
-    )
-
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # Close grey card container
