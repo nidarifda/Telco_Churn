@@ -10,42 +10,42 @@ st.set_page_config(
 
 # === Custom Styling ===
 st.markdown("""
-<style>
-body {
-    background-color: #dfeffe !important;
-    color: #2c3e50 !important;
-}
-.main, .block-container {
-    background-color: #dfeffe !important;
-    padding: 2rem;
-}
-h1, h2, h3, h4, h5, h6 {
-    color: #1b2e70 !important;
-    text-align: center;
-    font-family: 'Segoe UI', sans-serif;
-}
-p {
-    text-align: center;
-}
-.stButton>button, .stDownloadButton>button {
-    background-color: #1b2e70;
-    color: white;
-    font-weight: bold;
-    border-radius: 6px;
-}
-.stSidebar {
-    background-color: #1b2e70 !important;
-}
-.css-1d391kg, .css-ng1t4o {
-    background-color: #1b2e70 !important;
-    color: white !important;
-}
-.stFileUploader, .stExpander, .stSelectbox, .stSlider, .stNumberInput {
-    background-color: #f4f4f4 !important;
-    border-radius: 10px !important;
-    padding: 0.5rem;
-}
-</style>
+    <style>
+        html, body, .stApp {
+            background-color: #dfeffe; /* Soft Blue */
+        }
+        .block-container {
+            background-color: #f4f4f4 !important; /* Soft Grey Card Style */
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #1b2e70 !important;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        p {
+            text-align: center;
+        }
+        .stButton>button, .stDownloadButton>button {
+            background-color: #1b2e70;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #1b2e70 !important;
+            color: white !important;
+        }
+        section[data-testid="stSidebar"] * {
+            color: white !important;
+        }
+        .stFileUploader, .stExpander, .stSelectbox, .stSlider, .stNumberInput {
+            background-color: #f4f4f4 !important;
+            border-radius: 10px !important;
+            padding: 0.5rem;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
 # === Load Model and Scaler ===
