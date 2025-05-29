@@ -5,7 +5,6 @@ import joblib
 # === Page Configuration ===
 st.set_page_config(
     page_title="IBM Telco Churn Prediction",
-    page_icon="📊",
     layout="centered"
 )
 
@@ -13,40 +12,38 @@ st.set_page_config(
 st.markdown("""
 <style>
 body {
-    background-color: #eaf4fb !important;
-    color: #1f1f1f;
+    background-color: #dfeffe !important;
+    color: #2c3e50 !important;
 }
 .main, .block-container {
-    background-color: #eaf4fb !important;
+    background-color: #dfeffe !important;
     padding: 2rem;
 }
 h1, h2, h3, h4, h5, h6 {
-    color: #003366 !important;
+    color: #1b2e70 !important;
     text-align: center;
     font-family: 'Segoe UI', sans-serif;
 }
 p {
     text-align: center;
-    font-size: 1.05rem;
 }
 .stButton>button, .stDownloadButton>button {
-    background-color: #003366;
+    background-color: #1b2e70;
     color: white;
     font-weight: bold;
-    border-radius: 8px;
+    border-radius: 6px;
 }
-.stFileUploader, .stExpander, .stDataFrame, .stTable {
-    background-color: #ffffff !important;
-    padding: 1rem;
-    border-radius: 10px;
-    color: #1f1f1f;
+.stSidebar {
+    background-color: #1b2e70 !important;
 }
-section[data-testid="stSidebar"] {
-    background-color: #003366 !important;
+.css-1d391kg, .css-ng1t4o {
+    background-color: #1b2e70 !important;
     color: white !important;
 }
-section[data-testid="stSidebar"] .css-1cpxqw2 {
-    color: white !important;
+.stFileUploader, .stExpander, .stSelectbox, .stSlider, .stNumberInput {
+    background-color: #f4f4f4 !important;
+    border-radius: 10px !important;
+    padding: 0.5rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -58,20 +55,20 @@ scaler = joblib.load("minmax_scaler.pkl")
 # === Sidebar ===
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/8370/8370201.png", use_column_width=True)
-    st.markdown("<h3 style='color: white;'>About This App</h3>", unsafe_allow_html=True)
+    st.markdown("## About This App", unsafe_allow_html=True)
     st.markdown("""
 This AI-powered tool predicts the likelihood of a telco customer churning based on key behavioral indicators.
 
 🔹 Real-time ML inference  
 🔹 Streamlined feature input  
-🔹 Built using XGBoost & Streamlit  
-    """)
+🔹 Powered by XGBoost & Streamlit  
+    """, unsafe_allow_html=True)
     st.markdown("---")
     st.caption("Created by [Your Name](https://github.com/yourusername)")
 
 # === Main Title ===
-st.markdown("<h1 style='text-align: center; color: #003366;'>Telco Churn Prediction</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
+st.markdown("<h1>Telco Churn Prediction</h1>", unsafe_allow_html=True)
+st.markdown("<p>Predict customer churn with confidence.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # === Input Fields ===
@@ -86,7 +83,6 @@ with col2:
     data_plan = st.selectbox("Data Plan", [
         "10 GB", "30 GB", "50 GB", "100 GB", "200 GB", "300 GB", "Unlimited"
     ])
-
     gb_mapping = {
         "10 GB": 10,
         "30 GB": 30,
@@ -96,13 +92,10 @@ with col2:
         "300 GB": 300,
         "Unlimited": 500
     }
-
     avg_gb = gb_mapping[data_plan]
     satisfaction = st.slider("Satisfaction Score (1–5)", 1, 5, 3)
 
-st.markdown("")
-
-# === Predict Button ===
+# === Prediction ===
 if st.button("Predict Churn", use_container_width=True):
     input_data = np.array([[monthly_charge, tenure_months, avg_gb, satisfaction]])
     input_scaled = scaler.transform(input_data)
